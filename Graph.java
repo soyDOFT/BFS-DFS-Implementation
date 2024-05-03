@@ -2,13 +2,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
-//import java.util.Queue; //hint: might be useful for BFS - https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html
-//import java.util.LinkedList; //hint: might be useful for BFS - https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html
-//import java.util.Stack; //hint: might be useful for DFS - https://docs.oracle.com/javase/8/docs/api/java/util/Stack.html
+import java.util.Queue; //for BFS - https://docs.oracle.com/javase/8/docs/api/java/util/Queue.html
+import java.util.LinkedList; //for BFS - https://docs.oracle.com/javase/8/docs/api/java/util/LinkedList.html
+import java.util.Stack; //for DFS - https://docs.oracle.com/javase/8/docs/api/java/util/Stack.html
 
 /**
 This class will be a driver class that demonstrates graph traversal algorithms
-TODO - You must implement the breadthFirstSearch and depthFirstSearch methods contained in this class
 */
 public class Graph
 {
@@ -18,12 +17,10 @@ public class Graph
       ArrayList<Node> graph = createGraph();
            
       //you can call displayGraph to have it print out the information in the graph
-      //this is just provided to help you visualize each node in the graph, along with it's adjacent nodes
+      //this is just to help you visualize each node in the graph, along with it's adjacent nodes
       displayGraph(graph);
       
       //call BFS and DFS here to have them print out their traversals
-      //YOU MUST IMPLEMENT THESE METHODS!!!!
-      //the definitions are already done for you towards the end of this file, you just need to add the code to the body
       breadthFirstSearch(graph);
       depthFirstSearch(graph);
       
@@ -40,7 +37,7 @@ public class Graph
       A - the starting Node
       B D - nodes that are adjacent to A 
       This means that there is an edge from A to B and an edge from A to D
-   This is an unweighted graph, so no need to worry about weights on the edges  
+   This is an unweighted graph
    
    @return graph The graph 
    */
@@ -96,41 +93,71 @@ public class Graph
    }
    
    /**
-   TODO - Implement this method
    This method will perform a Breadth First Search traversal starting with the first Node contained in the graph
-   Follow the algorithm described in 13.5.5 of your zyBook
-   At the end of the method, you should display the contents of discoveredSet, which will be the traversal of the graph
+   At the end of the method, display the contents of discoveredSet, which will be the traversal of the graph
    @param graph An ArrayList of Node objects representing a graph
    */
    public static void breadthFirstSearch(ArrayList<Node> graph)
    {
-      //perform a breadth first traversal from the first Node in the graph (graph.get(0))
-      //Follow the algorithm described in 13.5.5 of your zyBook
-      //It lays out the entire algorithm in psuedocode - you just need to convert it into java code
-      //WRITE YOUR CODE HERE
-      
-      System.out.println("BFS:");
-      //print out the contents of discoveredSet - meaning the name of each node (don't use the toString() method since it includes the adjacency list)
+      //perform a breadth first traversal from the first Node in the graph
+      Queue<Node> queue = new LinkedList<>();
+      ArrayList<Node> discoveredSet = new ArrayList<>();
+      Node startNode = graph.get(0);
+      queue.add(startNode);
+      discoveredSet.add(startNode);
+
+      while(!queue.isEmpty()) {
+        Node current = queue.remove();
+
+        for (Node n : current.getAdjacencyList()) {
+            if (!discoveredSet.contains(n)) {
+                queue.add(n);
+                discoveredSet.add(n);
+            }
+            
+        }
+      }
+      //print out the contents of discoveredSet
+      System.out.println("\nBFS:");
+      for (Node n : discoveredSet) {
+        System.out.print(n.getName() + " ");
+      }
       System.out.println();
    }
-   
    /**
-   TODO - Implement this method
    This method will perform a Depth First Search traversal starting with the first Node contained in the graph
-   Follow the algorithm described in 13.6.3 of your zyBook
-   At the end of the method, you should display the contents of visitedSet, which will be the traversal of the graph
+   At the end of the method, displays the contents of visitedSet, which will be the traversal of the graph
    @param graph An ArrayList of Node objects representing a graph
    */
    public static void depthFirstSearch(ArrayList<Node> graph)
    {
    
-      //perform a depth first traversal from the first Node in the graph (graph.get(0))
-      //Follow the algorithm described in 13.5.5 of your zyBook
-      //It lays out the entire algorithm in psuedocode - you just need to convert it into java code
-      //WRITE YOUR CODE HERE
+      //perform a depth first traversal from the first Node in the graph
+      Stack<Node> stack = new Stack<>();
+      ArrayList<Node> visitedSet = new ArrayList<>();
+      Node startV = graph.get(0);
+      stack.push(startV);
+
+      while(!stack.isEmpty()) {
+        Node currentV = stack.pop();
+
+        if (!visitedSet.contains(currentV)){
+            visitedSet.add(currentV);
+            
+
+            for(Node adjV : currentV.getAdjacencyList()) {
+                stack.push(adjV);
+            }
+        }
+
+        
+    }
      
-      System.out.println("DFS:");
-      //print out the contents of visitedSet - meaning the name of each node (don't use the toString() method since it includes the adjacency list)
+      System.out.println("\nDFS:");
+      //print out the contents of visitedSet - meaning the name of each node
+      for (Node n : visitedSet) {
+        System.out.print(n.getName() + " ");
+      }
       System.out.println();
    }
 }
